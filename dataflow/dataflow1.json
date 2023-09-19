@@ -30,7 +30,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "sortregion"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          DateID as integer,",
@@ -57,7 +61,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> RegionDim"
+				"     ignoreNoFilesFound: false) ~> RegionDim",
+				"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion"
 			]
 		}
 	}
