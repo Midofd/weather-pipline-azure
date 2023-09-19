@@ -29,7 +29,29 @@
 					"description": "dimension Region"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "WeatherMatrics",
+						"type": "DatasetReference"
+					},
+					"name": "weathermatricss"
+				},
+				{
+					"dataset": {
+						"referenceName": "DateDim",
+						"type": "DatasetReference"
+					},
+					"name": "datesink"
+				},
+				{
+					"dataset": {
+						"referenceName": "RegionDim",
+						"type": "DatasetReference"
+					},
+					"name": "regionsink"
+				}
+			],
 			"transformations": [
 				{
 					"name": "sortregion"
@@ -62,7 +84,36 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RegionDim",
-				"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion"
+				"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion",
+				"sortregion sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          RegionID as string,",
+				"          AverageTemperature as string,",
+				"          Humidity as string,",
+				"          WindSpeed as string,",
+				"          Rainfall as string,",
+				"          SunshineHours as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> weathermatricss",
+				"DateDim sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          Date as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> datesink",
+				"RegionDim sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          RegionID as string,",
+				"          RegionName as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> regionsink"
 			]
 		}
 	}
