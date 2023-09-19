@@ -193,6 +193,184 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "WeatherMatrics",
+								"type": "DatasetReference"
+							},
+							"name": "WeatherMatrics",
+							"description": "Weather matrics"
+						},
+						{
+							"dataset": {
+								"referenceName": "DateDim",
+								"type": "DatasetReference"
+							},
+							"name": "DateDim",
+							"description": "Dimension Date"
+						},
+						{
+							"dataset": {
+								"referenceName": "RegionDim",
+								"type": "DatasetReference"
+							},
+							"name": "RegionDim",
+							"description": "dimension Region"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "WeatherMatrics",
+								"type": "DatasetReference"
+							},
+							"name": "weathermatricss"
+						},
+						{
+							"dataset": {
+								"referenceName": "DateDim",
+								"type": "DatasetReference"
+							},
+							"name": "datesink"
+						},
+						{
+							"dataset": {
+								"referenceName": "RegionDim",
+								"type": "DatasetReference"
+							},
+							"name": "regionsink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "sortregion"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          DateID as integer,",
+						"          RegionID as integer,",
+						"          AverageTemperature as integer,",
+						"          Humidity as integer,",
+						"          WindSpeed as integer,",
+						"          Rainfall as integer,",
+						"          SunshineHours as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> WeatherMatrics",
+						"source(output(",
+						"          DateID as integer,",
+						"          Date as date",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> DateDim",
+						"source(output(",
+						"          RegionID as integer,",
+						"          RegionName as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RegionDim",
+						"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion",
+						"sortregion sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          DateID as string,",
+						"          RegionID as string,",
+						"          AverageTemperature as string,",
+						"          Humidity as string,",
+						"          WindSpeed as string,",
+						"          Rainfall as string,",
+						"          SunshineHours as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> weathermatricss",
+						"DateDim sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          DateID as string,",
+						"          Date as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> datesink",
+						"RegionDim sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          RegionID as string,",
+						"          RegionName as string",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> regionsink"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/WeatherMatrics')]",
+				"[concat(variables('factoryId'), '/datasets/DateDim')]",
+				"[concat(variables('factoryId'), '/datasets/RegionDim')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_weather')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "dataflow1",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"WeatherMatrics": {},
+									"DateDim": {},
+									"RegionDim": {},
+									"weathermatricss": {},
+									"datesink": {},
+									"regionsink": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
 		}
 	]
 }
