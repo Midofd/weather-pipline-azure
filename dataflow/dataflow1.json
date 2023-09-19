@@ -1,0 +1,64 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "WeatherMatrics",
+						"type": "DatasetReference"
+					},
+					"name": "WeatherMatrics",
+					"description": "Weather matrics"
+				},
+				{
+					"dataset": {
+						"referenceName": "DateDim",
+						"type": "DatasetReference"
+					},
+					"name": "DateDim",
+					"description": "Dimension Date"
+				},
+				{
+					"dataset": {
+						"referenceName": "RegionDim",
+						"type": "DatasetReference"
+					},
+					"name": "RegionDim",
+					"description": "dimension Region"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          DateID as integer,",
+				"          RegionID as integer,",
+				"          AverageTemperature as integer,",
+				"          Humidity as integer,",
+				"          WindSpeed as integer,",
+				"          Rainfall as integer,",
+				"          SunshineHours as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> WeatherMatrics",
+				"source(output(",
+				"          DateID as integer,",
+				"          Date as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DateDim",
+				"source(output(",
+				"          RegionID as integer,",
+				"          RegionName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> RegionDim"
+			]
+		}
+	}
+}
