@@ -1,0 +1,9 @@
+{
+	"name": "elmehdifaida",
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b15e1ac3-1a31-40d8-9b6c-f6ce49ace0b4",
+		"tenantId": "a2e466aa-4f86-4545-b5b8-97da7c8febf3"
+	}
+}
