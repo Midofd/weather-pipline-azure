@@ -42,7 +42,7 @@
 						"referenceName": "dateDim",
 						"type": "DatasetReference"
 					},
-					"name": "datesink"
+					"name": "datedimss"
 				},
 				{
 					"dataset": {
@@ -100,14 +100,16 @@
 				"          DateID as string,",
 				"          Date as string",
 				"     ),",
+				"     filePattern:'dateDimePre',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> datesink",
+				"     skipDuplicateMapOutputs: true) ~> datedimss",
 				"RegionDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          RegionID as string,",
 				"          RegionName as string",
 				"     ),",
+				"     filePattern:'regionDimPre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> regionsink"
 			]
