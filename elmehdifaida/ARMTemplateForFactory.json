@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
 		},
+		"AzureBlobStorage2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage2'"
+		},
 		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
@@ -52,7 +56,7 @@
 									"DateDim": {},
 									"RegionDim": {},
 									"weathermatricss": {},
-									"datesink": {},
+									"datedimss": {},
 									"regionsink": {}
 								}
 							},
@@ -76,16 +80,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DateDim')]",
+			"name": "[concat(parameters('factoryName'), '/dateDim')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
+					"referenceName": "AzureBlobStorage2",
 					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "weather-dataset"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -112,20 +113,17 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage2')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/RegionDim')]",
+			"name": "[concat(parameters('factoryName'), '/regionDim')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
+					"referenceName": "AzureBlobStorage2",
 					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "weather-dataset"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -152,20 +150,17 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage2')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/WeatherMatrics')]",
+			"name": "[concat(parameters('factoryName'), '/weatherMatrics')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureBlobStorage1",
+					"referenceName": "AzureBlobStorage2",
 					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "weather-dataset"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
@@ -212,7 +207,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage2')]"
 			]
 		},
 		{
@@ -224,6 +219,19 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage2_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -255,7 +263,7 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "WeatherMatrics",
+								"referenceName": "weatherMatrics",
 								"type": "DatasetReference"
 							},
 							"name": "WeatherMatrics",
@@ -263,7 +271,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "DateDim",
+								"referenceName": "dateDim",
 								"type": "DatasetReference"
 							},
 							"name": "DateDim",
@@ -271,7 +279,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "RegionDim",
+								"referenceName": "regionDim",
 								"type": "DatasetReference"
 							},
 							"name": "RegionDim",
@@ -281,60 +289,55 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "WeatherMatrics",
+								"referenceName": "weatherMatrics",
 								"type": "DatasetReference"
 							},
 							"name": "weathermatricss"
 						},
 						{
 							"dataset": {
-								"referenceName": "DateDim",
+								"referenceName": "dateDim",
 								"type": "DatasetReference"
 							},
-							"name": "datesink"
+							"name": "datedimss"
 						},
 						{
 							"dataset": {
-								"referenceName": "RegionDim",
+								"referenceName": "regionDim",
 								"type": "DatasetReference"
 							},
 							"name": "regionsink"
 						}
 					],
-					"transformations": [
-						{
-							"name": "sortregion"
-						}
-					],
+					"transformations": [],
 					"scriptLines": [
 						"source(output(",
-						"          DateID as integer,",
-						"          RegionID as integer,",
-						"          AverageTemperature as integer,",
-						"          Humidity as integer,",
-						"          WindSpeed as integer,",
-						"          Rainfall as integer,",
-						"          SunshineHours as integer",
+						"          DateID as string,",
+						"          RegionID as string,",
+						"          AverageTemperature as string,",
+						"          Humidity as string,",
+						"          WindSpeed as string,",
+						"          Rainfall as string,",
+						"          SunshineHours as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> WeatherMatrics",
 						"source(output(",
-						"          DateID as integer,",
-						"          Date as date",
+						"          DateID as string,",
+						"          Date as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> DateDim",
 						"source(output(",
-						"          RegionID as integer,",
+						"          RegionID as string,",
 						"          RegionName as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> RegionDim",
-						"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion",
-						"sortregion sink(allowSchemaDrift: true,",
+						"WeatherMatrics sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
 						"          DateID as string,",
@@ -345,6 +348,7 @@
 						"          Rainfall as string,",
 						"          SunshineHours as string",
 						"     ),",
+						"     filePattern:'weathermatricsPre',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> weathermatricss",
 						"DateDim sink(allowSchemaDrift: true,",
@@ -353,23 +357,25 @@
 						"          DateID as string,",
 						"          Date as string",
 						"     ),",
+						"     filePattern:'dateDimePre',",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> datesink",
+						"     skipDuplicateMapOutputs: true) ~> datedimss",
 						"RegionDim sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
 						"          RegionID as string,",
 						"          RegionName as string",
 						"     ),",
+						"     filePattern:'regionDimPre',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> regionsink"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/WeatherMatrics')]",
-				"[concat(variables('factoryId'), '/datasets/DateDim')]",
-				"[concat(variables('factoryId'), '/datasets/RegionDim')]"
+				"[concat(variables('factoryId'), '/datasets/weatherMatrics')]",
+				"[concat(variables('factoryId'), '/datasets/dateDim')]",
+				"[concat(variables('factoryId'), '/datasets/regionDim')]"
 			]
 		}
 	]
