@@ -31,20 +31,28 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
 					"name": "weathermatricss"
 				},
 				{
+					"dataset": {
+						"referenceName": "dateDim",
+						"type": "DatasetReference"
+					},
 					"name": "datesink"
 				},
 				{
+					"dataset": {
+						"referenceName": "regionDim",
+						"type": "DatasetReference"
+					},
 					"name": "regionsink"
 				}
 			],
-			"transformations": [
-				{
-					"name": "sortregion"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          DateID as string,",
@@ -72,18 +80,34 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RegionDim",
-				"WeatherMatrics sort(asc(RegionID, true)) ~> sortregion",
-				"sortregion sink(allowSchemaDrift: true,",
+				"WeatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          RegionID as string,",
+				"          AverageTemperature as string,",
+				"          Humidity as string,",
+				"          WindSpeed as string,",
+				"          Rainfall as string,",
+				"          SunshineHours as string",
+				"     ),",
 				"     filePattern:'weathermatricsPre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> weathermatricss",
 				"DateDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          Date as string",
+				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> datesink",
 				"RegionDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          RegionID as string,",
+				"          RegionName as string",
+				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> regionsink"
 			]
