@@ -5,10 +5,18 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
 					"name": "WeatherMatrics",
 					"description": "Weather matrics"
 				},
 				{
+					"dataset": {
+						"referenceName": "datedim",
+						"type": "DatasetReference"
+					},
 					"name": "DateDim",
 					"description": "Dimension Date"
 				},
@@ -30,23 +38,16 @@
 			],
 			"transformations": [],
 			"scriptLines": [
-				"source(output(",
-				"          DateID as string,",
-				"          RegionID as string,",
-				"          AverageTemperature as string,",
-				"          Humidity as string,",
-				"          WindSpeed as string,",
-				"          Rainfall as string,",
-				"          SunshineHours as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> WeatherMatrics",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> WeatherMatrics",
 				"source(output(",
 				"          DateID as string,",
 				"          Date as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> DateDim",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> DateDim",
 				"source(output(",
 				"          RegionID as string,",
 				"          RegionName as string",

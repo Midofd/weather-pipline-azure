@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "regiondim",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
