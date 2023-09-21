@@ -19,12 +19,19 @@
 					},
 					"name": "RegionDim",
 					"description": "dimension Region"
+				},
+				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
+					"name": "weatherMatrics"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "datedim",
+						"referenceName": "datedimPre",
 						"type": "DatasetReference"
 					},
 					"name": "datedimss"
@@ -35,6 +42,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "regionsink"
+				},
+				{
+					"name": "sink1"
 				}
 			],
 			"transformations": [],
@@ -53,12 +63,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RegionDim",
+				"source(output(",
+				"          DateID as integer,",
+				"          RegionID as integer,",
+				"          AverageTemperature as integer,",
+				"          Humidity as integer,",
+				"          WindSpeed as integer,",
+				"          Rainfall as integer,",
+				"          SunshineHours as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> weatherMatrics",
 				"DateDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          DateID as string,",
-				"          Date as string",
-				"     ),",
 				"     filePattern:'dateDimePre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> datedimss",
@@ -70,7 +88,11 @@
 				"     ),",
 				"     filePattern:'regionDimPre',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> regionsink"
+				"     skipDuplicateMapOutputs: true) ~> regionsink",
+				"weatherMatrics sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
