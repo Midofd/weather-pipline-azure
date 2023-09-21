@@ -14,14 +14,6 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "regiondim",
-						"type": "DatasetReference"
-					},
-					"name": "RegionDim",
-					"description": "dimension Region"
-				},
-				{
-					"dataset": {
 						"referenceName": "weatherMatrics",
 						"type": "DatasetReference"
 					},
@@ -35,13 +27,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "datedimSink"
-				},
-				{
-					"dataset": {
-						"referenceName": "AzureSynapseAnalyticsTable2",
-						"type": "DatasetReference"
-					},
-					"name": "regionSink"
 				},
 				{
 					"dataset": {
@@ -64,13 +49,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> DateDim",
-				"source(output(",
-				"          RegionID as integer,",
-				"          RegionName as string",
-				"     ),",
-				"     allowSchemaDrift: false,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> RegionDim",
 				"source(output(",
 				"          DateID as integer,",
 				"          RegionID as integer,",
@@ -104,17 +82,6 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> datedimSink",
-				"RegionDim sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     staged: true,",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> regionSink",
 				"weatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
