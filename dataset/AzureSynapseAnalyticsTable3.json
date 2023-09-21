@@ -1,0 +1,52 @@
+{
+	"name": "AzureSynapseAnalyticsTable3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "DateID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "RegionID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AverageTemperature",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Humidity",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "WindSpeed",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "Rainfall",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "SunshineHours",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "WeatherMetrics"
+		}
+	}
+}

@@ -31,21 +31,21 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "datedimPre",
+						"referenceName": "AzureSynapseAnalyticsTable1",
 						"type": "DatasetReference"
 					},
 					"name": "datedimSink"
 				},
 				{
 					"dataset": {
-						"referenceName": "regiondimPre",
+						"referenceName": "AzureSynapseAnalyticsTable2",
 						"type": "DatasetReference"
 					},
 					"name": "regionSink"
 				},
 				{
 					"dataset": {
-						"referenceName": "weathermatricsPre",
+						"referenceName": "AzureSynapseAnalyticsTable3",
 						"type": "DatasetReference"
 					},
 					"name": "weathermatricsSink"
@@ -94,27 +94,53 @@
 				"     stepValue: 1L) ~> SurrogateKey",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     filePattern:'dateDimePre',",
+				"     input(",
+				"          ID as integer,",
+				"          DATE as date,",
+				"          Year as integer,",
+				"          Month as integer,",
+				"          Day as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> datedimSink",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> datedimSink",
 				"RegionDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          DateID as string,",
-				"          Date as string",
-				"     ),",
-				"     filePattern:'regionDimPre',",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> regionSink",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> regionSink",
 				"SurrogateKey sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          DateID as string,",
-				"          Date as string",
+				"          DateID as integer,",
+				"          RegionID as integer,",
+				"          AverageTemperature as double,",
+				"          Humidity as double,",
+				"          WindSpeed as double,",
+				"          Rainfall as double,",
+				"          SunshineHours as double",
 				"     ),",
-				"     filePattern:'weatherMatrics',",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> weathermatricsSink"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> weathermatricsSink"
 			]
 		}
 	}
