@@ -68,7 +68,7 @@
 				"          RegionID as integer,",
 				"          RegionName as string",
 				"     ),",
-				"     allowSchemaDrift: true,",
+				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RegionDim",
 				"source(output(",
