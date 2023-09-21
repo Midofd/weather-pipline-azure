@@ -6,14 +6,6 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "weatherMatrics",
-						"type": "DatasetReference"
-					},
-					"name": "WeatherMatrics",
-					"description": "Weather matrics"
-				},
-				{
-					"dataset": {
 						"referenceName": "datedim",
 						"type": "DatasetReference"
 					},
@@ -21,51 +13,95 @@
 					"description": "Dimension Date"
 				},
 				{
+					"dataset": {
+						"referenceName": "regiondim",
+						"type": "DatasetReference"
+					},
 					"name": "RegionDim",
 					"description": "dimension Region"
+				},
+				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
+					"name": "weathermatrics"
 				}
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
 					"name": "weathermatricss"
 				},
 				{
+					"dataset": {
+						"referenceName": "datedim",
+						"type": "DatasetReference"
+					},
 					"name": "datedimss"
 				},
 				{
+					"dataset": {
+						"referenceName": "regiondim",
+						"type": "DatasetReference"
+					},
 					"name": "regionsink"
 				}
 			],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> WeatherMatrics",
 				"source(output(",
-				"          DateID as string,",
+				"          DateID as integer,",
 				"          Date as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> DateDim",
 				"source(output(",
-				"          RegionID as string,",
+				"          RegionID as integer,",
 				"          RegionName as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> RegionDim",
-				"WeatherMatrics sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> RegionDim",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> weathermatrics",
+				"weathermatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     filePattern:'weathermatricsPre',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> weathermatricss",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> weathermatricss",
 				"DateDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          Date as string",
+				"     ),",
 				"     filePattern:'dateDimePre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> datedimss",
 				"RegionDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          RegionID as string,",
+				"          RegionName as string",
+				"     ),",
 				"     filePattern:'regionDimPre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> regionsink"
