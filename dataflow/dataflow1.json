@@ -54,6 +54,9 @@
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "SurrogateKey"
 				}
 			],
 			"scriptLines": [
@@ -86,6 +89,9 @@
 				"DateDim derive(Year = year(Date),",
 				"          Month = month(Date),",
 				"          Day = dayOfMonth(Date)) ~> derivedColumn1",
+				"weatherMatrics keyGenerate(output(ID as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> SurrogateKey",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     filePattern:'dateDimePre',",
@@ -100,7 +106,7 @@
 				"     filePattern:'regionDimPre',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> regionSink",
-				"weatherMatrics sink(allowSchemaDrift: true,",
+				"SurrogateKey sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          DateID as string,",
