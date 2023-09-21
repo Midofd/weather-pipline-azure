@@ -30,7 +30,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "weathermatricsPre",
+						"referenceName": "AzureSynapseAnalyticsTable2",
 						"type": "DatasetReference"
 					},
 					"name": "weathermatricsSink"
@@ -84,13 +84,15 @@
 				"     errorHandlingOption: 'stopOnFirstError') ~> datedimSink",
 				"weatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          DateID as string,",
-				"          Date as string",
-				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     format: 'table') ~> weathermatricsSink"
+				"     errorHandlingOption: 'stopOnFirstError') ~> weathermatricsSink"
 			]
 		}
 	}
