@@ -18,6 +18,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "weatherMatrics"
+				},
+				{
+					"dataset": {
+						"referenceName": "regiondim",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -34,6 +41,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "weathermatricsSink"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSynapseAnalyticsTable2",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -61,6 +75,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> weatherMatrics",
+				"source(output(",
+				"          RegionID as string,",
+				"          RegionName as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"DateDim derive(Year = year(Date),",
 				"          Month = month(Date),",
 				"          Day = dayOfMonth(Date)) ~> derivedColumn1",
@@ -101,7 +122,19 @@
 				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> weathermatricsSink"
+				"     errorHandlingOption: 'stopOnFirstError') ~> weathermatricsSink",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
