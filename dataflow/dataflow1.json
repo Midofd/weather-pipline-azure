@@ -44,6 +44,10 @@
 					"name": "regionsink"
 				},
 				{
+					"dataset": {
+						"referenceName": "weatherMatrics",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -91,6 +95,15 @@
 				"     skipDuplicateMapOutputs: true) ~> regionsink",
 				"weatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     input(",
+				"          DateID as string,",
+				"          RegionID as string,",
+				"          AverageTemperature as string,",
+				"          Humidity as string,",
+				"          WindSpeed as string,",
+				"          Rainfall as string,",
+				"          SunshineHours as string",
+				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
