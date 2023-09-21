@@ -112,6 +112,7 @@
 				"          DateID as string,",
 				"          Date as string",
 				"     ),",
+				"     filePattern:'weatherMatrics',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> weathermatricsSink"
 			]
