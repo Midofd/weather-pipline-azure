@@ -30,7 +30,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSynapseAnalyticsTable3",
+						"referenceName": "weathermatricsPre",
 						"type": "DatasetReference"
 					},
 					"name": "weathermatricsSink"
@@ -85,23 +85,12 @@
 				"weatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          DateID as integer,",
-				"          RegionID as integer,",
-				"          AverageTemperature as double,",
-				"          Humidity as double,",
-				"          WindSpeed as double,",
-				"          Rainfall as double,",
-				"          SunshineHours as double",
+				"          DateID as string,",
+				"          Date as string",
 				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     staged: true,",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> weathermatricsSink"
+				"     format: 'table') ~> weathermatricsSink"
 			]
 		}
 	}
