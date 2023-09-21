@@ -34,28 +34,32 @@
 						"referenceName": "datedimPre",
 						"type": "DatasetReference"
 					},
-					"name": "datedimss"
+					"name": "datedimSink"
 				},
 				{
 					"dataset": {
 						"referenceName": "regiondimPre",
 						"type": "DatasetReference"
 					},
-					"name": "regionsink"
+					"name": "regionSink"
 				},
 				{
 					"dataset": {
 						"referenceName": "weathermatricsPre",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "weathermatricsSink"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          DateID as integer,",
-				"          Date as string",
+				"          Date as date",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -79,11 +83,14 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> weatherMatrics",
-				"DateDim sink(allowSchemaDrift: true,",
+				"DateDim derive(Year = year(Date),",
+				"          Month = month(Date),",
+				"          Day = dayOfMonth(Date)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     filePattern:'dateDimePre',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> datedimss",
+				"     skipDuplicateMapOutputs: true) ~> datedimSink",
 				"RegionDim sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -92,7 +99,7 @@
 				"     ),",
 				"     filePattern:'regionDimPre',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> regionsink",
+				"     skipDuplicateMapOutputs: true) ~> regionSink",
 				"weatherMatrics sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -100,7 +107,7 @@
 				"          Date as string",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true) ~> weathermatricsSink"
 			]
 		}
 	}
